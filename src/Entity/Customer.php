@@ -7,17 +7,56 @@ use App\Repository\CustomerRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
+
+/*
+**  Dans ApiRessource on peut activer ou desactiver les
+**  opération (GET, POST, DELETE, PUT etc...)
+**  ==> 
+**  collectionOperations={"GET", "POST"},
+**  itemOperations={"GET", "PUT", "DELETE"},
+**
+**  =+> Ici tout est activé (par defaut on peut ne rien mettre)
+**
+**  On peut aussi changer la route
+**  ex : /api/customers => api/clients
+**  ==>
+**  collectionOperations={"GET"={"path"="/clients"}, "POST"},
+**  itemOperations={"GET"={"path"="clients/{id}"}, "PUT", "DELETE"}, 
+**
+**
+** On peut aussi crée des subresources avec un path particulier
+**
+**  subresourceOperations={
+**      "invoices_get_subresource"={"path"="/clients/{id}/factures"}
+** },
+**
+**  Avec ajout de l'annotation @ApiSubresource() au dessus de
+**  l'element concerné (ici invoices)
+**
+*/
+
+
+
+
+
+
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @ApiResource(
+ *  collectionOperations={"GET", "POST"},
+ *  itemOperations={"GET", "PUT", "DELETE"},
+ *  subresourceOperations={
+ *      "invoices_get_subresource"={"path"="/customers/{id}/invoices"}
+ * },
  *  normalizationContext={
  *      "groups"={"customers_read"}
- * }
+ *  }
  * )
  * @ApiFilter(SearchFilter::class, properties={
  * "firstName":"start","lastName","company"})
@@ -60,6 +99,7 @@ class Customer
     /**
      * @ORM\OneToMany(targetEntity=Invoice::class, mappedBy="customer")
      * @Groups({"customers_read"})
+     * @ApiSubresource()
      */
     private $invoices;
 

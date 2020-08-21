@@ -7,13 +7,29 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\InvoiceRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\InvoiceIncrementationController;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
+/*
+**  Ici subresource_operations a comme parametre le COMPORTEMENT
+**  des invoices quand c'est une SOUS RESOURCES.
+**  Ici on lui donne un context de groupe qui permet d'afficher ou non
+**  certaines infos.
+*/
+
 /**
  * @ORM\Entity(repositoryClass=InvoiceRepository::class)
  * @ApiResource(
+ *  subresourceOperations={
+ *      "api_customers_invoices_get_subresource"={
+ *          "normalization_context"={"groups"={"invoices_subresource"}}
+ *      }
+ *  },
+ * itemOperations={
+ *  "GET", "PUT", "DELETE"
+ * },
  *  attributes={
  *      "pagination_enabled"=true,
  *      "pagination_items_per_page"=10,
@@ -27,29 +43,42 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  */
 class Invoice
 {
+    /*
+    **  Ici on ajoute le group invoices_subresource,
+    **  qui quand l'invoice sera appelé en sous resource
+    **  et pas en resource principale alors on affichera ce champ.
+    */
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $id;
+
+    /*
+    **  Ici on ajoute le group invoices_subresource,
+    **  qui quand l'invoice sera appelé en sous resource
+    **  et pas en resource principale alors on affichera ce champ.
+    */
 
     /**
      * @ORM\Column(type="float")
      * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"invoices_read", "customers_read"})
+     * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $sentAt;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "customers_read"})
+     *@Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $status;
 
@@ -62,16 +91,14 @@ class Invoice
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "customers_read"})
+     *@Groups({"invoices_read", "customers_read", "invoices_subresource"})
      */
     private $chrono;
 
-
-  
     /**
      * Permet de recuperer le user a qui appartient la facture
      *
-     * @Groups({"invoices_read"})
+     * @Groups({"invoices_read", "invoices_subresource"})
      * @return User
      */
     public function getUser(): User
