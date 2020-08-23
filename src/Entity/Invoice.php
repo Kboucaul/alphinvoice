@@ -9,6 +9,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\InvoiceIncrementationController;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
@@ -67,18 +69,26 @@ class Invoice
      * @ORM\Column(type="float")
      * @Groups({"invoices_read", "customers_read"})
      * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * 
+     * @Assert\NotBlank(message="Le montant est obligatoire")
+     * @Assert\Type(type="numeric", message="Le montant de la facture doit être un nombre")
      */
     private $amount;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     * 
+     * @Assert\NotBlank(message="La date d'envoi doit être renseignée")
      */
     private $sentAt;
 
     /**
      * @ORM\Column(type="string", length=255)
      *@Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     *
+     *@Assert\NotBlank(message="Le statut de la facture est obligatoire")
+     * @Assert\Choice(choices={"envoyée", "payée", "annulée"}, message="Le statut doit être envoyée, payée ou annulée")
      */
     private $status;
 
@@ -86,12 +96,17 @@ class Invoice
      * @ORM\ManyToOne(targetEntity=Customer::class, inversedBy="invoices")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"invoices_read"})
+     * 
+     * @Assert\NotBlank(message="Le client doit être renseigné")
      */
     private $customer;
 
     /**
      * @ORM\Column(type="integer")
      *@Groups({"invoices_read", "customers_read", "invoices_subresource"})
+     *
+     *@Assert\NotBlank(message="Le chrono doit être renseigné")
+     *@Assert\Type(type="integer", message="Le chrono doit être un nombre entier") 
      */
     private $chrono;
 
@@ -128,7 +143,7 @@ class Invoice
         return $this->sentAt;
     }
 
-    public function setSentAt(\DateTimeInterface $sentAt): self
+    public function setSentAt($sentAt): self
     {
         $this->sentAt = $sentAt;
 
