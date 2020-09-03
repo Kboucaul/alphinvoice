@@ -33,7 +33,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *  "GET", "PUT", "DELETE"
  * },
  *  attributes={
- *      "pagination_enabled"=true,
+ *      "pagination_enabled"=false,
  *      "pagination_items_per_page"=10,
  *      "order": {"amount":"asc"}
  *  },
