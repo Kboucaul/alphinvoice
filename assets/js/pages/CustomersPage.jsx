@@ -75,11 +75,10 @@ const fetchCustomers = async () => {
     return (
         <>
         <h1>Liste des clients</h1>
-
-        <div className="form-group">
+        <div className="form-group form-control">
             <input type="text" onChange={handleSearch} value={search} className="form-control" placeholder="Rechercher..."/>
         </div>
-
+        <div className="container">
         <table className="table table-hover">
             <thead>
                 <tr>
@@ -116,6 +115,7 @@ const fetchCustomers = async () => {
         </table>
         
         {itemsPerPage < filteredCustomers.length && <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} length={filteredCustomers.length} onPageChanged={handlePageChange} />}
+    </div>
     </>
      );
 }
