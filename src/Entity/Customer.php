@@ -77,7 +77,7 @@ class Customer
      * @Groups({"customers_read", "invoices_read"})
      * 
      * @Assert\NotBlank(message="Le prénom du customer est obligatoire")
-     * @Assert\Length(min=3, max=255, minMessage="Le prénom doit faire plus de 2 caracteres", maxMessage="Le prénom est trop long")
+     * @Assert\Length(min=3, max=255, minMessage="Le prénom doit faire plus de 2 caracteres", maxMessage="Le prénom est trop long", allowEmptyString = true)
      */
     private $firstName;
 
@@ -86,7 +86,7 @@ class Customer
      * @Groups({"customers_read", "invoices_read"})
      * 
      * @Assert\NotBlank(message="Le nom du customer est obligatoire")
-     * @Assert\Length(min=3, max=255, minMessage="Le nom doit faire plus de 2 caracteres", maxMessage="Le nom est trop long")
+     * @Assert\Length(min=3, max=255, minMessage="Le nom doit faire plus de 2 caracteres", maxMessage="Le nom est trop long", allowEmptyString = true)
      */
     private $lastName;
 

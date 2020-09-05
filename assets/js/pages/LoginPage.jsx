@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import AuthAPI from "../services/authAPI";
 import AuthContext from "../contexts/AuthContext";
+import Field from "../components/forms/Field";
+import Button from "../components/forms/Button";
 
 const LoginPage = ({ history }) => {
   const { setIsAuthenticated } = useContext(AuthContext);
@@ -20,6 +22,7 @@ const LoginPage = ({ history }) => {
   // Gestion du submit
   const handleSubmit = async event => {
     event.preventDefault();
+    
 
     try {
       await AuthAPI.authenticate(credentials);
@@ -36,38 +39,29 @@ const LoginPage = ({ history }) => {
   return (
     <>
       <h1>Connexion à l'application</h1>
-
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="username">Adresse email</label>
-          <input
-            value={credentials.username}
-            onChange={handleChange}
-            type="email"
-            placeholder="Adresse email de connexion"
-            name="username"
-            id="username"
-            className={"form-control" + (error && " is-invalid")}
+        <Field
+          name={"username"} 
+          label={"Adresse email"}
+          value={credentials.username}
+          onChange={handleChange}
+          placeholder={"Adresse email de connexion"}
+          type={"email"}
+          error={error}
           />
-          {error && <p className="invalid-feedback">{error}</p>}
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Mot de passe</label>
-          <input
-            value={credentials.password}
-            onChange={handleChange}
-            type="password"
-            placeholder="Mot de passe"
-            name="password"
-            id="password"
-            className="form-control"
+        <Field
+          name={"password"} 
+          label={"Mot de passe"}
+          value={credentials.password}
+          onChange={handleChange}
+          placeholder={"Mot de passe"}
+          type={"password"}
           />
-        </div>
-        <div className="form-group">
-          <button type="submit" className="btn btn-success">
-            Je me connecte
-          </button>
-        </div>
+          <Button 
+            type= {"submit"}
+            classname={"btn btn-success"}
+            label={"Je me connecte"}
+          />
       </form>
     </>
   );

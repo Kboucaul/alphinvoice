@@ -2,6 +2,7 @@ import moment from "moment";
 import React, { useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import InvoicesAPI from "../services/invoicesAPI.js";
+import { Link } from "react-router-dom";
 
 const STATUS_CLASSES = {
     payée: "success",
@@ -83,7 +84,10 @@ const filteredInvoices = invoices.filter(i =>
     
     return ( 
         <>
+        <div className="mb-3 d-flex justify-content-between align-items-center">
             <h1>Liste des factures</h1>
+            <Link to="/invoices/new" className="btn btn-primary">Créer une facture</Link>
+        </div>
 
             <div className="form-group">
                 <input type="text" onChange={handleSearch} value={search} className="form-control" placeholder="Rechercher..."/>
@@ -117,8 +121,8 @@ const filteredInvoices = invoices.filter(i =>
                         </td>
                         <td className="text-center">{invoice.amount.toLocaleString()} &euro;</td>
                         <td>
-                            <button className="btn btn-warning btn-sm mr-1">Modifier</button>
-                            <button className="btn btn-danger btn-sm" onClick={() => handleDelete(invoice.id)}>Supprimer</button>
+                            <Link to={"/invoices/" + invoice.id} className="btn btn-warning btn-sm mt-1 mr-1">Modifier</Link>
+                            <button className="btn btn-danger btn-sm mt-1" onClick={() => handleDelete(invoice.id)}>Supprimer</button>
                         </td>
                     </tr>    
                     )}
