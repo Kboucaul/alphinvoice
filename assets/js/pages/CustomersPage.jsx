@@ -3,7 +3,7 @@ import Pagination from '../components/Pagination';
 import CustomersAPI from "../services/customersAPI.js";
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import TableLoader from '../components/loaders/tableLoader';
+import TableLoader from '../components/loaders/TableLoader.jsx';
 
 const CustomersPage = (props) => {
 
