@@ -33,9 +33,7 @@ const InvoicePage = ({ history, match }) => {
       setLoadingCus(false);
       if (!invoice.customer) setInvoice({ ...invoice, customer: data[0].id });
     } catch (error) {
-      toast.error("Une erreur est survenue", {
-        position: "bottom-left"
-      })
+      toast.error("Une erreur est survenue");
       history.replace("/invoices");
     }
   };
@@ -47,9 +45,7 @@ const InvoicePage = ({ history, match }) => {
       setInvoice({ amount, status, customer: customer.id });
       setLoadingInv(false);
     } catch (error) {
-      toast.error("Erreur lors du chargement de la facture demandée", {
-        position: "bottom-left"
-      });
+      toast.error("Erreur lors du chargement de la facture demandée");
       history.replace("/invoices");
     }
   };
@@ -84,16 +80,12 @@ const InvoicePage = ({ history, match }) => {
       if (editing) 
       {
         await InvoicesAPI.update(id, invoice);
-        toast.success("Les modifications ont bien été enregistrées", {
-          position: "bottom-left"
-        })
+        toast.success("Les modifications ont bien été enregistrées");
       }
       else
       {
         await InvoicesAPI.create(invoice);
-        toast.success("La facture a bien été créée", {
-          position: "bottom-left"
-        });
+        toast.success("La facture a bien été créée");
         }
         history.replace("/invoices");
     } catch ({ response }) {
@@ -103,12 +95,9 @@ const InvoicePage = ({ history, match }) => {
         const apiErrors = {};
         violations.forEach(({ propertyPath, message }) => {
           apiErrors[propertyPath] = message;
-        });
-
+        }); 
         setErrors(apiErrors);
-        toast.error("Une erreur est survenue... Veuillez réessayer.", {
-          position: "bottom-left"
-        })
+        toast.error("Une erreur est survenue... Veuillez réessayer.");
       }
     }
   };

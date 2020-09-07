@@ -22,10 +22,7 @@ const fetchCustomers = async () => {
       setCustomers(data);
       setLoading(false);
     } catch (error) {
-      toast.error("Une erreur est survenue lors du chargement des clients, veuillez réessayer plus tard", 
-      {
-          position: "bottom-left"
-      })
+      toast.error("Une erreur est survenue lors du chargement des clients, veuillez réessayer plus tard");
     }
   };
 
@@ -49,11 +46,9 @@ const fetchCustomers = async () => {
         //on demande a axios d'effectuer une requete en mode delete
         try {
             await CustomersAPI.delete(id);
-            toast.info("Le client a bien été supprimé", {
-                position: "bottom-left"
-            });
+            toast.info("Le client a bien été supprimé");
         } catch(error) {
-            toast.danger("Une erreur est survenue. Le client n'a pas été supprimé")
+            toast.danger("Une erreur est survenue. Le client n'a pas été supprimé");
             setCustomers(originalCustomers)
         }
     }

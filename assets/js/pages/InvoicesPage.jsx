@@ -54,13 +54,9 @@ const handleDelete = async (id) => {
     //on demande a axios d'effectuer une requete en mode delete
     try {
         await InvoicesAPI.delete(id)
-        toast.info("La facture a bien été supprimée", {
-            position: "bottom-left"
-        })
+        toast.info("La facture a bien été supprimée")
     } catch(error) {
-        toast.danger("Une erreur est survenue, la facture n'a pas pu être supprimée", {
-            position: "bottom-left"
-        })
+        toast.danger("Une erreur est survenue, la facture n'a pas pu être supprimée");
         setInvoices(originalInvoices)
     }
 }

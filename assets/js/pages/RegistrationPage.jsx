@@ -40,17 +40,13 @@ const RegistrationPage = ({history}) => {
         {
             apiErrors.passwordConfirm = "Les mots de passe doivent être identiques !";
             setErrors(apiErrors);
-            toast.error("Une erreur est survenue...😔, verifiez le formulaire", {
-                position: "bottom-left"
-            });
+            toast.error("Une erreur est survenue...😔, verifiez le formulaire");
             return ;
         }
         try {
             await RegistrationAPI.createUserRegistration(user);
             setErrors([]);
-            toast.success("Votre compte a bien été crée ! 👏", {
-                position: "bottom-left"
-            });
+            toast.success("Votre compte a bien été crée ! 👏");
             history.replace('/login');
 
         } catch ({response}) {
@@ -61,9 +57,7 @@ const RegistrationPage = ({history}) => {
                     apiErrors[violation.propertyPath] = violation.message;
                 });
                 setErrors(apiErrors);
-                toast.error("Une erreur est survenue...😔, verifiez le formulaire", {
-                    position: "bottom-left"
-                });
+                toast.error("Une erreur est survenue...😔, verifiez le formulaire");
             }
         }
     }

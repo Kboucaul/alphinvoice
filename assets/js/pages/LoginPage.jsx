@@ -29,17 +29,13 @@ const LoginPage = ({ history }) => {
       await AuthAPI.authenticate(credentials);
       setError("");
       setIsAuthenticated(true);
-      toast.success("Vous êtes désormais connecté", {
-        position: "bottom-left"
-      });
+      toast.success("Vous êtes désormais connecté");
       history.replace("/");
     } catch (error) {
       setError(
         "Aucun compte ne possède cette adresse email ou alors les informations ne correspondent pas !"
       );
-      toast.error("Une erreur est survenue", {
-        position: "bottom-left"
-      });
+      toast.error("Une erreur est survenue");
     }
   };
 

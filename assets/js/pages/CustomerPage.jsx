@@ -86,17 +86,13 @@ const CustomerPage = ({match, history}) => {
             if (editing)
             {
                 await CustomersAPI.editCustomer(id, customer)
-                toast.success("Les modifications ont bien été enregistrées", {
-                    position: "bottom-left"
-                })
+                toast.success("Les modifications ont bien été enregistrées");
             }
             //Si on est en création
             else
             {
                 await CustomersAPI.createCustomer(customer);
-                toast.success("Le client a bien été crée", {
-                    position: "left-center"
-                })
+                toast.success("Le client a bien été crée");
             }
             setErrors({});
             history.replace("/customers");
@@ -118,9 +114,7 @@ const CustomerPage = ({match, history}) => {
                     apiErrors[violation.propertyPath] = violation.message;
                 });
                 //On set nos messages d'erreurs qui seront affichés
-                toast.error("Une erreur est survenue, veuillez vérifier le formulaire", {
-                    position: "bottom-left"
-                })
+                toast.error("Une erreur est survenue, veuillez vérifier le formulaire");
                 setErrors(apiErrors);
             }
         }
