@@ -58,7 +58,7 @@ const handleDelete = async (id) => {
     } catch(error) {
         toast.danger("Une erreur est survenue, la facture n'a pas pu être supprimée");
         setInvoices(originalInvoices)
-    }
+    }   
 }
 
 //Gestion de la recherche
