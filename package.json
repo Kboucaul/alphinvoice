@@ -25,8 +25,8 @@
         "react-router-dom": "^5.2.0",
         "react-toastify": "^5.5.0"
     },
-    "name": "myapp",
-    "description": "a really cool app",
+    "name": "alphinvoices",
+    "description": "web app for customers invoices management",
     "version": "1.0.0",
     "engines": {
         "node": "12.18.3"
