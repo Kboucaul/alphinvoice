@@ -24,5 +24,13 @@
         "react-dom": "^16.8.6",
         "react-router-dom": "^5.0.0",
         "react-toastify": "^5.5.0"
-    }
+    },
+        "name": "myapp",
+        "description": "a really cool app",
+        "version": "1.0.0",
+        "engines": {
+          "node": "12.18.3"
+        }
 }
+
+
