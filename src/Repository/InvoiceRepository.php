@@ -22,15 +22,14 @@ class InvoiceRepository extends ServiceEntityRepository
 
     public function findLastChrono(User $user) 
     {
-        return $this->createQueryBuilder("i")
-                    ->select("i.chrono")
-                    ->join("i.customer", "c")
-                    ->where("c.user = :user")
-                    ->setParameter("user", $user)
-                    ->orderBy("i.chrono", "DESC")
-                    ->setMaxResults(1)
-                    ->getQuery()
-                    ->getSingleScalarResult(); //Le plus haut chrono
+        return $this->createQueryBuilder('i')
+        ->select('COALESCE(MAX(i.chrono), 0) as chrono')
+        ->join('i.customer', 'c')
+        ->where('c.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getSingleScalarResult()
+        ;
     }
 
     // /**
