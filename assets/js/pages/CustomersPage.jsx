@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Pagination from '../components/Pagination';
 import CustomersAPI from "../services/customersAPI.js";
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import TableLoader from '../components/loaders/tableLoader';
 
 const CustomersPage = (props) => {
 
@@ -9,7 +11,7 @@ const CustomersPage = (props) => {
     const [customers, setCustomers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
-   
+    const [loading, setLoading] = useState(true);
     //Calcul du nombre de pages
     const itemsPerPage = 10;
 
@@ -18,8 +20,12 @@ const fetchCustomers = async () => {
     try {
       const data = await CustomersAPI.findAll();
       setCustomers(data);
+      setLoading(false);
     } catch (error) {
-      console.log(error.response);
+      toast.error("Une erreur est survenue lors du chargement des clients, veuillez réessayer plus tard", 
+      {
+          position: "bottom-left"
+      })
     }
   };
 
@@ -42,8 +48,12 @@ const fetchCustomers = async () => {
         //moins rapide
         //on demande a axios d'effectuer une requete en mode delete
         try {
-            await CustomersAPI.delete(id)
+            await CustomersAPI.delete(id);
+            toast.info("Le client a bien été supprimé", {
+                position: "bottom-left"
+            });
         } catch(error) {
+            toast.danger("Une erreur est survenue. Le client n'a pas été supprimé")
             setCustomers(originalCustomers)
         }
     }
@@ -96,12 +106,14 @@ const fetchCustomers = async () => {
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            {!loading &&<tbody>
                 {paginatedCustomers.map(customer => 
                 <tr key={customer.id}>
                     <td>{customer.id}</td>
                     <td>
-                        <a href="#">{customer.firstName} {customer.lastName}</a>
+                    <Link to={"/customers/" + customer.id}>
+                                {customer.firstName} {customer.lastName}
+                            </Link>
                     </td>
                     <td>{customer.email}</td>
                     <td>{customer.company}</td>
@@ -110,15 +122,16 @@ const fetchCustomers = async () => {
                     </td>
                     <td className="text-center">{customer.totalAmount.toLocaleString()} &euro;</td>
                     <td>
+                        <Link to={"/customers/" + customer.id} className="btn btn-warning btn-sm mt-1 mr-1">Modifier</Link>
                         <button 
                         disabled={customer.invoices.length > 0}
-                        className="btn btn-sm btn-danger"
+                        className="btn btn-sm btn-danger mt-1"
                         onClick={() => handleDelete(customer.id)}>Supprimer</button>
                     </td>
                 </tr>)}
-            </tbody>
+            </tbody>}
         </table>
-        
+        {loading && <TableLoader />}
         {itemsPerPage < filteredCustomers.length && <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} length={filteredCustomers.length} onPageChanged={handlePageChange} />}
     </div>
     </>

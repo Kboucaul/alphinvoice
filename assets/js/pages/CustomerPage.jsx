@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import Button from '../components/forms/Button';
 import Field from '../components/forms/Field';
 import CustomersAPI from '../services/customersAPI';
+import { toast } from 'react-toastify';
+import FormContentLoader from '../components/loaders/FormContentLoader';
 
 const CustomerPage = ({match, history}) => {
     
@@ -28,7 +30,7 @@ const CustomerPage = ({match, history}) => {
         company    : ""
     });
     const [editing, setEditing] = useState(false);
- 
+    const [loading, setLoading] = useState(true);
     /*
     **  On va chercher le client correspondant a l'id
     */
@@ -37,6 +39,7 @@ const CustomerPage = ({match, history}) => {
             const { firstName, lastName, email, company } = await CustomersAPI.getCustomerById(id);
              //on ne veut enregistrer que certains champs
              setCustomer({firstName, lastName, email, company});
+             setLoading(false);
             } 
         catch(error)
         {
@@ -54,6 +57,10 @@ const CustomerPage = ({match, history}) => {
         {
             setEditing(true);
             fetchCustomer(id);
+        }
+        else
+        {
+            setLoading(false);
         }
     }, [id]);
 
@@ -79,14 +86,20 @@ const CustomerPage = ({match, history}) => {
             if (editing)
             {
                 await CustomersAPI.editCustomer(id, customer)
+                toast.success("Les modifications ont bien été enregistrées", {
+                    position: "bottom-left"
+                })
             }
             //Si on est en création
             else
             {
                 await CustomersAPI.createCustomer(customer);
+                toast.success("Le client a bien été crée", {
+                    position: "left-center"
+                })
             }
-            history.replace("/customers");
             setErrors({});
+            history.replace("/customers");
         }
         /*
         **  Si on ne remplit pas tous les
@@ -95,9 +108,8 @@ const CustomerPage = ({match, history}) => {
         **  pas respectées.
         */
        //On destructure error pour recuperer la reposne
-        catch({ response }) {
+        catch({response}) {
             const violations = response.data.violations;
-
             if (violations)
             {
                 const apiErrors = {};
@@ -106,6 +118,9 @@ const CustomerPage = ({match, history}) => {
                     apiErrors[violation.propertyPath] = violation.message;
                 });
                 //On set nos messages d'erreurs qui seront affichés
+                toast.error("Une erreur est survenue, veuillez vérifier le formulaire", {
+                    position: "bottom-left"
+                })
                 setErrors(apiErrors);
             }
         }
@@ -119,7 +134,8 @@ const CustomerPage = ({match, history}) => {
             { editing &&
                <h1 className="mb-4">Modification du client n°{id}</h1> 
             }
-            <form onSubmit={handleSubmit}>
+            {loading && <FormContentLoader />}
+            {!loading && <form onSubmit={handleSubmit}>
                 <Field 
                     name        = "lastName"
                     label       = "Nom de famille"
@@ -167,7 +183,7 @@ const CustomerPage = ({match, history}) => {
                         }
                     />
                 </div>
-            </form>
+            </form>}
         </>
      );
 }

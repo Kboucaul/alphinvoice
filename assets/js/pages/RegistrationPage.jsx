@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Field from '../components/forms/Field';
 import { Link } from 'react-router-dom';
 import RegistrationAPI from '../services/registrationAPI';
+import { toast } from 'react-toastify';
 
 const RegistrationPage = ({history}) => {
     
@@ -24,7 +25,7 @@ const RegistrationPage = ({history}) => {
     /*
     **  Affiche saisie de l'utilisateur
     */
-   const handleChange = (event) => {
+    const handleChange = (event) => {
     const name = event.currentTarget['name'];
     const value = event.currentTarget['value'];
     setUser({...user, [name]: value});
@@ -39,11 +40,17 @@ const RegistrationPage = ({history}) => {
         {
             apiErrors.passwordConfirm = "Les mots de passe doivent être identiques !";
             setErrors(apiErrors);
+            toast.error("Une erreur est survenue...😔, verifiez le formulaire", {
+                position: "bottom-left"
+            });
             return ;
         }
         try {
             await RegistrationAPI.createUserRegistration(user);
             setErrors([]);
+            toast.success("Votre compte a bien été crée ! 👏", {
+                position: "bottom-left"
+            });
             history.replace('/login');
 
         } catch ({response}) {
@@ -54,6 +61,9 @@ const RegistrationPage = ({history}) => {
                     apiErrors[violation.propertyPath] = violation.message;
                 });
                 setErrors(apiErrors);
+                toast.error("Une erreur est survenue...😔, verifiez le formulaire", {
+                    position: "bottom-left"
+                });
             }
         }
     }
